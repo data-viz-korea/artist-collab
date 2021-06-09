@@ -5,10 +5,32 @@ const pool = new Pool({
     port: 5432
 });
 
+const getCollaborateData = () => {
+    const songJson = require('./data/songs_table.json');
+    const data = songJson.data;
+    const result = [];
+    data.forEach(d => {
+        const collaborators_id = d.collaborators_id;
+        collaborators_id.forEach(c => {
+            const text =
+              `INSERT INTO collaborate(
+                artist_id, 
+                song_id
+                ) VALUES($1, $2)`;
+            const values = [c, d.index];
+            result.push({
+                sql: text,
+                value: values
+            });
+        });
+    });
+    return result;
+};
+
 const getSongData = () => {
     const songJson = require('./data/songs_table.json');
     const data = songJson.data;
-    const result = data.map(d => {
+    const result = data.map((d, idx) => {
         const text =
           `INSERT INTO song(
             id, 
@@ -19,11 +41,10 @@ const getSongData = () => {
             rank_median, 
             weeks_on_chart, 
             week_min, 
-            week_max, 
-            collaborator_ids
-            ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`;
+            week_max
+            ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`;
         const values = [d.index, d.song_name, d.rank_min, d.rank_mean5, d.rank_mean,
-            d.rank_median, d.weeks_on_chart, d.week_min, d.week_max, d.collaborators_id];
+            d.rank_median, d.weeks_on_chart, d.week_min, d.week_max];
 
         return {
             sql: text,
@@ -82,10 +103,10 @@ const insertData = async (data) => {
 }
 
 (async () => {
+    /*
     console.log('Start to insert artist data');
     const artistData = getArtistData();
     for (const d of artistData) {
-        console.log(d);
         await insertData(d);
     }
     console.log(`Finish artist data >>> ${artistData.length}`);
@@ -93,10 +114,17 @@ const insertData = async (data) => {
     console.log('Start to insert song data');
     const songData = getSongData();
     for (const d of songData) {
-        console.log(d);
         await insertData(d);
     }
     console.log(`Finish song data >>> ${songData.length}`);
+    */
+
+    console.log('Start to insert collaborate data');
+    const collaborateData = getCollaborateData();
+    for (const d of collaborateData) {
+        await insertData(d);
+    }
+    console.log(`Finish collaborate data >>> ${collaborateData.length}`);
 
     await pool.end();
 })().catch(err => console.log(err))

@@ -10,12 +10,10 @@ CREATE TABLE IF NOT EXISTS song  (
     weeks_on_chart DOUBLE PRECISION,
     week_min TIMESTAMP,
     week_max TIMESTAMP,
-    collaborator_ids INTEGER[],
     applemusic_url VARCHAR(200),
     spotify_url VARCHAR(200),
     youtube_url VARCHAR(200)
 );
-
 
 CREATE TABLE IF NOT EXISTS artist (
     id INTEGER PRIMARY KEY,
@@ -39,4 +37,10 @@ CREATE TABLE IF NOT EXISTS artist (
     wiki_url VARCHAR(200)
 );
 
-
+CREATE TABLE IF NOT EXISTS collaborate (
+    id SERIAL PRIMARY KEY,
+    artist_id INTEGER,
+    song_id INTEGER,
+    FOREIGN KEY(artist_id) REFERENCES artist(id),
+    FOREIGN KEY(song_id) REFERENCES song(id)
+)
