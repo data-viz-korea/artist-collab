@@ -1,14 +1,15 @@
 <template>
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <data-viz-main />
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import "@/assets/global.scss";
+import DataVizMain from "./components/dataVizPane/DataVizMain.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    DataVizMain,
   },
 };
 </script>
