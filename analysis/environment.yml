@@ -1,0 +1,12 @@
+name: dviz
+channels:
+  - defaults
+dependencies:
+  - pip
+  - numpy
+  - pandas
+  - matplotlib
+  - seaborn
+  - networkx
+  - plotly
+prefix: /Users/suzinyou/opt/anaconda3/envs/dviz
