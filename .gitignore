@@ -3,3 +3,6 @@ node_modules
 .idea
 
 app/scripts/data
+
+analysis/notebooks/.ipynb_checkpoints
+analysis/notebooks/*.html
